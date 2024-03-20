@@ -14,6 +14,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.sanselan.ImageReadException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.context.Context;
 
+import com.drew.imaging.ImageProcessingException;
 import com.example.pictgram.entity.Comment;
 import com.example.pictgram.entity.Favorite;
 import com.example.pictgram.entity.Topic;
@@ -167,7 +169,7 @@ public class TopicsController {
 	@RequestMapping(value = "/topic", method = RequestMethod.POST)
 	public String create(Principal principal, @Validated @ModelAttribute("form") TopicForm form, BindingResult result,
 			Model model, @RequestParam MultipartFile image, RedirectAttributes redirAttrs, Locale locale)
-			throws IOException {
+			throws ImageProcessingException, IOException, ImageReadException {
 		if (result.hasErrors()) {
 			model.addAttribute("hasMessage", true);
 			model.addAttribute("class", "alert-danger");
@@ -205,7 +207,8 @@ public class TopicsController {
 		return "redirect:/topics";
 	}
 
-	private File saveImageLocal(MultipartFile image, Topic entity) throws IOException {
+	private File saveImageLocal(MultipartFile image, Topic entity)
+			throws IOException, ImageProcessingException, ImageReadException {
 		File uploadDir = new File("/uploads");
 		uploadDir.mkdir();
 
@@ -218,7 +221,14 @@ public class TopicsController {
 		File destFile = new File(realPathToUploads, fileName);
 		image.transferTo(destFile);
 
+		setGeoInfo(entity, destFile, image.getOriginalFilename());
+
 		return destFile;
+	}
+
+	private void setGeoInfo(Topic entity, File destFile, String originalFilename) {
+		// TODO 自動生成されたメソッド・スタブ
+		
 	}
 
 }

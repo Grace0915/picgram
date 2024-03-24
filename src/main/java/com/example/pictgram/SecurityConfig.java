@@ -31,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private FormAuthenticationProvider authenticationProvider;
 
-	private static final String[] URLS = { "/css/**", "/images/**", "/scripts/**", "/h2-console/**", "/favicon.ico", "/OneSignalSDKWorker.js" };
+	private static final String[] URLS = { "/css/**", "/images/**", "/scripts/**", "/h2-console/**", "/favicon.ico",
+			"/OneSignalSDKWorker.js" };
 
 	/**
 	* 認証から除外する
@@ -57,7 +58,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // form
                 .and().formLogin().loginPage("/login").defaultSuccessUrl("/topics").failureUrl("/login-failure")
                 .permitAll();
-        // @formatter:on
+        		// @formatter:on               
+        		// oauth2
+               
+                 
+ 
+                     
 	}
 
 	@Override
